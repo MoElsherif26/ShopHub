@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using ShopHub.Core.Interfaces;
+using ShopHub.Core.Services;
 using ShopHub.Infrastructure.Data;
 using ShopHub.Infrastructure.Repositories;
+using ShopHub.Infrastructure.Repositories.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +36,10 @@ namespace ShopHub.Infrastructure
             
             // apply unit of work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddSingleton<IImageManagementService, ImageManagementService>();
+            services.AddSingleton<IFileProvider>(
+                new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
 
             // apply dbcontext
             services.AddDbContext<AppDbContext>(options =>

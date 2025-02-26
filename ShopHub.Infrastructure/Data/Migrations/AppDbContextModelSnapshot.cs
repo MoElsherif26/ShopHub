@@ -71,6 +71,14 @@ namespace ShopHub.Infrastructure.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Photos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 3,
+                            ImageName = "Test Image",
+                            ProductId = 1
+                        });
                 });
 
             modelBuilder.Entity("ShopHub.Core.Entities.Product.Product", b =>
@@ -92,7 +100,10 @@ namespace ShopHub.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal>("NewPrice")
+                        .HasColumnType("decimal(18.2)");
+
+                    b.Property<decimal>("OldPrice")
                         .HasColumnType("decimal(18.2)");
 
                     b.HasKey("Id");
@@ -108,35 +119,29 @@ namespace ShopHub.Infrastructure.Data.Migrations
                             CategoryId = 1,
                             Description = "TestProductDescription",
                             Name = "TestProduct",
-                            Price = 120m
+                            NewPrice = 120m,
+                            OldPrice = 0m
                         });
                 });
 
             modelBuilder.Entity("ShopHub.Core.Entities.Product.Photo", b =>
                 {
-                    b.HasOne("ShopHub.Core.Entities.Product.Product", "Product")
+                    b.HasOne("ShopHub.Core.Entities.Product.Product", null)
                         .WithMany("Photos")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ShopHub.Core.Entities.Product.Product", b =>
                 {
                     b.HasOne("ShopHub.Core.Entities.Product.Category", "Category")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("ShopHub.Core.Entities.Product.Category", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ShopHub.Core.Entities.Product.Product", b =>

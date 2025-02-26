@@ -15,7 +15,10 @@ namespace ShopHub.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // add infrastructure
             builder.Services.InfrastructureConfiguration(builder.Configuration);
+            // add automapper
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             var app = builder.Build();
 
