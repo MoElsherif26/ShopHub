@@ -18,5 +18,6 @@ namespace ShopHub.Core.Interfaces
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(int id);
+        Task<int> CountAsync();
     }
 }

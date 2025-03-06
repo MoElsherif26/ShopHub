@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShopHub.API.Helper;
 using ShopHub.Core.DTO;
 using ShopHub.Core.Interfaces;
+using ShopHub.Core.Sharing;
 
 namespace ShopHub.API.Controllers
 {
@@ -13,15 +14,17 @@ namespace ShopHub.API.Controllers
         {
         }
         [HttpGet("get-all")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] ProductParams productParams)
         {
             try
             {
-                var productsDomain = await work.ProductRepository
-                    .GetAllAsync(product => product.Category,
-                    products => products.Photos);
-                var productsDto = mapper.Map<List<ProductDTO>>(productsDomain);
-                return Ok(productsDto);
+                var products = await work.ProductRepository
+                    .GetAllAsync(productParams);
+
+
+                return Ok(new Pagination<ProductDTO>(productParams.PageNumber, 
+                    productParams.pageSize, products.TotalCount, 
+                    products.products));
             }
             catch (Exception ex)
             {

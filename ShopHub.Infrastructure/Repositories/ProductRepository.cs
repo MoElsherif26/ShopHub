@@ -4,6 +4,7 @@ using ShopHub.Core.DTO;
 using ShopHub.Core.Entities.Product;
 using ShopHub.Core.Interfaces;
 using ShopHub.Core.Services;
+using ShopHub.Core.Sharing;
 using ShopHub.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,51 @@ namespace ShopHub.Infrastructure.Repositories
             this.context = context;
             this.mapper = mapper;
             this.imageManagementService = imageManagementService;
+        }
+
+        public async Task<ReturnProductDTO> GetAllAsync(ProductParams productParams)
+        {
+            var products = context.Products
+                .Include(m => m.Category)
+                .Include(m => m.Photos)
+                .AsNoTracking();
+
+            if (!string.IsNullOrEmpty(productParams.Search))
+            {
+                var searchWords = productParams.Search.Split(' ');
+
+                products = products.Where(m => searchWords.All(word =>
+
+                m.Name.ToLower().Contains(word.ToLower()) || m.Description.ToLower().Contains(word.ToLower())
+
+                ));
+            }
+                
+
+            if (productParams.CategoryId.HasValue)
+                products = products.Where(m => m.CategoryId == productParams.CategoryId);
+
+
+
+
+            if (!string.IsNullOrEmpty(productParams.Sort))
+            {
+                products = productParams.Sort switch
+                {
+            
+                    "PriceAce" => products.OrderBy(m => m.NewPrice),
+                    "PriceDce" => products.OrderByDescending(m => m.NewPrice),
+                    _ => products.OrderBy(m => m.Name),
+                };
+            }
+
+            ReturnProductDTO returnProductDTO = new ReturnProductDTO();
+            returnProductDTO.TotalCount = products.Count();
+
+            products = products.Skip((productParams.pageSize) * (productParams.PageNumber - 1)).Take(productParams.pageSize);
+
+            returnProductDTO.products = mapper.Map<List<ProductDTO>>(products);
+            return returnProductDTO;
         }
 
         public async Task<bool> AddAsync(AddProductDTO addProductDTO)
