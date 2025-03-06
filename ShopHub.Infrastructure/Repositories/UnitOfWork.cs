@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ShopHub.Core.Entities;
 using ShopHub.Core.Interfaces;
 using ShopHub.Core.Services;
 using ShopHub.Infrastructure.Data;
@@ -21,6 +22,8 @@ namespace ShopHub.Infrastructure.Repositories
 
         public IPhotoRepository PhotoRepository {  get; }
 
+        public ICustomerBasketRepository CustomerBasket {  get; }
+
         public UnitOfWork(AppDbContext context, IMapper mapper, IImageManagementService imageManagementService)
         {
             _context = context;
@@ -30,6 +33,7 @@ namespace ShopHub.Infrastructure.Repositories
             CategoryRepository = new CategoryRepository(_context);
             ProductRepository = new ProductRepository(_context, _mapper, _imageManagementService);
             PhotoRepository = new PhotoRepository(_context);
+            CustomerBasket = new CustomerBasketRepository();
         }
     }
 }

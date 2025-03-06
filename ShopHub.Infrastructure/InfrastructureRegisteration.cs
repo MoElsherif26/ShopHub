@@ -7,6 +7,7 @@ using ShopHub.Core.Services;
 using ShopHub.Infrastructure.Data;
 using ShopHub.Infrastructure.Repositories;
 using ShopHub.Infrastructure.Repositories.Service;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,15 @@ namespace ShopHub.Infrastructure
             
             // apply unit of work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // apply redis connection
+            services.AddSingleton<IConnectionMultiplexer>(i =>
+            {
+                var config = ConfigurationOptions
+                .Parse(configuration.GetConnectionString("redis"));
+
+                return ConnectionMultiplexer.Connect(config);
+            });
 
             services.AddSingleton<IImageManagementService, ImageManagementService>();
             services.AddSingleton<IFileProvider>(
