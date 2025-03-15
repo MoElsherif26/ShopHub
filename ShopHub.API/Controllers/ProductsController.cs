@@ -26,7 +26,7 @@ namespace ShopHub.API.Controllers
                     productParams.pageSize, products.TotalCount, 
                     products.products));
             }
-            catch (Exception ex)
+            catch 
             {
                 return BadRequest(new ResponseAPI(400, "Something went wrong while getting products"));
             }
@@ -47,7 +47,7 @@ namespace ShopHub.API.Controllers
                 var productDto = mapper.Map<ProductDTO>(productDomain);
                 return Ok(productDto);
             }
-            catch (Exception ex)
+            catch 
             {
                 return BadRequest(new ResponseAPI(400, "Something went wrong while getting product"));
             }
@@ -62,7 +62,7 @@ namespace ShopHub.API.Controllers
                 return Ok(new ResponseAPI(200, "Product Added!"));
 
             }
-            catch (Exception ex)
+            catch 
             {
 
                 return BadRequest(new ResponseAPI(400, "Something went wrong while adding product"));
@@ -79,7 +79,7 @@ namespace ShopHub.API.Controllers
                 return Ok(new ResponseAPI(200, "Product Updated!"));
 
             }
-            catch (Exception ex)
+            catch 
             {
 
                 return BadRequest(new ResponseAPI(400, "Something went wrong while updating product"));
@@ -99,7 +99,7 @@ namespace ShopHub.API.Controllers
                 return Ok(new ResponseAPI(200, "Product Deleted!"));
 
             }
-            catch (Exception ex)
+            catch 
             {
                 return BadRequest(new ResponseAPI(400, "Something went wrong while deleting product"));
             }

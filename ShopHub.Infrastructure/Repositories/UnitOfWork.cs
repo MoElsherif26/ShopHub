@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using ShopHub.Core.Entities;
 using ShopHub.Core.Interfaces;
 using ShopHub.Core.Services;
@@ -18,7 +19,9 @@ namespace ShopHub.Infrastructure.Repositories
         private readonly IMapper _mapper;
         private readonly IImageManagementService _imageManagementService;
         private readonly IConnectionMultiplexer redis;
-
+        private readonly UserManager<AppUser> userManager;
+        private readonly IEmailService emailService;
+        private readonly SignInManager<AppUser> signInManager; 
         public ICategoryRepository CategoryRepository { get; }
 
         public IProductRepository ProductRepository { get; }
@@ -27,18 +30,24 @@ namespace ShopHub.Infrastructure.Repositories
 
         public ICustomerBasketRepository CustomerBasket {  get; }
 
-        public UnitOfWork(AppDbContext context, IMapper mapper, 
-            IImageManagementService imageManagementService, 
-            IConnectionMultiplexer redis)
+        public IAuth Auth { get; }
+
+        public UnitOfWork(AppDbContext context, IMapper mapper,
+            IImageManagementService imageManagementService,
+            IConnectionMultiplexer redis, UserManager<AppUser> userManager, IEmailService emailService, SignInManager<AppUser> signInManager)
         {
             _context = context;
             _mapper = mapper;
             _imageManagementService = imageManagementService;
             this.redis = redis;
+            this.userManager = userManager;
+            this.emailService = emailService;
+            this.signInManager = signInManager;
             CategoryRepository = new CategoryRepository(_context);
             ProductRepository = new ProductRepository(_context, _mapper, _imageManagementService);
             PhotoRepository = new PhotoRepository(_context);
             CustomerBasket = new CustomerBasketRepository(redis);
+            Auth = new AuthRepository(userManager, emailService, signInManager);
         }
     }
 }

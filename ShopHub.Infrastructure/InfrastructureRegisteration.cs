@@ -38,6 +38,9 @@ namespace ShopHub.Infrastructure
             // apply unit of work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            // register email sender
+            services.AddScoped<IEmailService, EmailService>();
+
             // apply redis connection
             services.AddSingleton<IConnectionMultiplexer>(i =>
             {

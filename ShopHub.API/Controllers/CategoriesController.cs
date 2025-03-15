@@ -22,7 +22,7 @@ namespace ShopHub.API.Controllers
                 var categories = await work.CategoryRepository.GetAllAsync();
                 return Ok(categories);
             }
-            catch (Exception ex)
+            catch
             {
                 return BadRequest(new ResponseAPI(400, "Something went wrong while getting categories"));
             }
@@ -40,7 +40,7 @@ namespace ShopHub.API.Controllers
                 }
                 return Ok(category);
             }
-            catch (Exception ex)
+            catch 
             {
                 return BadRequest(new ResponseAPI(400, "Something went wrong while getting category"));
             }
@@ -55,7 +55,7 @@ namespace ShopHub.API.Controllers
                 await work.CategoryRepository.AddAsync(category);
                 return Ok(new ResponseAPI(200, "Category Added!"));
             }
-            catch (Exception ex)
+            catch 
             {
                 return BadRequest(new ResponseAPI(400, "Something went wrong while adding category"));
             }
@@ -70,7 +70,7 @@ namespace ShopHub.API.Controllers
                 await work.CategoryRepository.UpdateAsync(category);
                 return Ok(new ResponseAPI(200, "Category Updated!"));
             }
-            catch (Exception ex)
+            catch 
             {
                 return BadRequest(new ResponseAPI(400, "Something went wrong while updating category"));
             }
@@ -84,7 +84,7 @@ namespace ShopHub.API.Controllers
                 await work.CategoryRepository.DeleteAsync(id);
                 return Ok(new ResponseAPI(200, "Category Deleted!"));
             }
-            catch (Exception ex)
+            catch 
             {
                 return BadRequest(new ResponseAPI(400, "Something went wrong while deleting category"));
             }
