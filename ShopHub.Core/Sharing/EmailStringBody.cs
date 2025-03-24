@@ -15,7 +15,8 @@ namespace ShopHub.Core.Sharing
             return $@"
                     <html>
                         <head>
-                              .button {{
+                              <style>
+                                .button {{
                                 border: none;
                                 border-radius: 10px;
                                 padding: 15px 30px;
@@ -31,12 +32,13 @@ namespace ShopHub.Core.Sharing
                                 font-family: 'Arial', sans-serif;
                                 animation: glow 1.5s infinite alternate;
                                 }}
+                            </style>
                         </head>
                         <body>
                             <h1>{message}</h1>
                             <hr>
                             <br>
-                            <a class=""button"" href=""http://localhost:4200/Account/component?email={email}&code={encodeToken}"">
+                            <a class=""button"" href=""http://localhost:4200/Account/{component}?email={email}&code={encodeToken}"">
                                 {message}
                             </a>
                         </body>

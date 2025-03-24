@@ -21,7 +21,8 @@ namespace ShopHub.Infrastructure.Repositories
         private readonly IConnectionMultiplexer redis;
         private readonly UserManager<AppUser> userManager;
         private readonly IEmailService emailService;
-        private readonly SignInManager<AppUser> signInManager; 
+        private readonly SignInManager<AppUser> signInManager;
+        private readonly IGenerateToken token;
         public ICategoryRepository CategoryRepository { get; }
 
         public IProductRepository ProductRepository { get; }
@@ -34,7 +35,7 @@ namespace ShopHub.Infrastructure.Repositories
 
         public UnitOfWork(AppDbContext context, IMapper mapper,
             IImageManagementService imageManagementService,
-            IConnectionMultiplexer redis, UserManager<AppUser> userManager, IEmailService emailService, SignInManager<AppUser> signInManager)
+            IConnectionMultiplexer redis, UserManager<AppUser> userManager, IEmailService emailService, SignInManager<AppUser> signInManager, IGenerateToken token)
         {
             _context = context;
             _mapper = mapper;
@@ -43,11 +44,12 @@ namespace ShopHub.Infrastructure.Repositories
             this.userManager = userManager;
             this.emailService = emailService;
             this.signInManager = signInManager;
+            this.token = token;
             CategoryRepository = new CategoryRepository(_context);
             ProductRepository = new ProductRepository(_context, _mapper, _imageManagementService);
             PhotoRepository = new PhotoRepository(_context);
             CustomerBasket = new CustomerBasketRepository(redis);
-            Auth = new AuthRepository(userManager, emailService, signInManager);
+            Auth = new AuthRepository(userManager, emailService, signInManager, token);
         }
     }
 }

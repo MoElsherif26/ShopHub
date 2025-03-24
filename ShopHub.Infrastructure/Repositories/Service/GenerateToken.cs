@@ -20,7 +20,7 @@ namespace ShopHub.Infrastructure.Repositories.Service
             this.configuration = configuration;
         }
 
-        public async Task<string> GetAndCreateToken(AppUser user)
+        public string GetAndCreateToken(AppUser user)
         {
 
             List<Claim> claims = new List<Claim>()
